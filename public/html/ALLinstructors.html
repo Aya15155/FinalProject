@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Instructors</title>
+    <link rel="stylesheet" type="text/css" href="/css/ALLinstructors.css">
+</head>
+<body>
+    <nav>
+        <a href="/html/administration.html" class="nav-link ">Courses</a>
+        <a href="/html/AllStudents.html" class="">students</a>
+        <a href="#" class="current-page">Instructors</a>
+    </nav>
+    <div class="instructors">
+        <h1>All Instructors</h1>
+        <div class="instructor-list">
+            <a href="/html/add_instructor.html"><div class="add_instructor"><div class="img"><img src="/media/image.png"></div></div></a>
+        </div>
+    </div>
+
+    <script>
+        fetch('/displayallinstractors') 
+    .then(response => response.json())
+    .then(data => {
+        console.log(data); 
+        const instructorListContainer = document.querySelector('.instructor-list');
+        if (data.length === 0) {
+            instructorListContainer.innerHTML = "<p>No instructors found.</p>";
+        } else {
+            data.forEach(instructor => {
+                const instructorDiv = document.createElement('div');
+                instructorDiv.classList.add('instructor');
+                instructorDiv.innerHTML = `
+                    <div class="instructor-info">
+                        <h2>${instructor.name}</h2>
+                        <p>ID: ${instructor.ID}</p>
+                        <p>Email: ${instructor.email}</p>
+                        <p>password: ${instructor.Password}</p>
+                    </div>
+                `;
+                instructorListContainer.appendChild(instructorDiv);
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Error fetching instructors:', error);
+    });
+
+    </script>
+</body>
+</html>

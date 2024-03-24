@@ -1,0 +1,123 @@
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+}
+
+nav {
+    position: fixed;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #333;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    justify-content: center;
+    align-content: space-between;
+    
+    width: 10vw;
+}
+
+
+
+nav a{
+    color: #fff;
+    text-decoration: none;
+    padding: 30px 0 ;
+    
+    text-decoration: none;
+    width: 100%;
+    
+    align-items: center;
+    align-content: center;
+    text-align: center;
+}
+.current-page{
+    background-color: gray;
+    border-width: 3px;
+    border: white;
+    margin-left: 2vw;
+    border-radius: 10px 0 10px 0 ;
+    box-shadow: -3px -10px 10px rgba(66, 63, 63, 0.349);
+    z-index: 2;
+}
+nav a:hover {
+    background-color:#999595;
+    border-width: 3px;
+    border: white;
+    margin-left: 1vw;
+    border-radius: 10px 0 10px 0 ;
+    box-shadow: -3px -10px 10px rgba(66, 63, 63, 0.349);
+    z-index: 0;
+}
+
+
+
+
+
+
+.instructors{
+    margin-left: 17vw;
+    
+}
+.instructors h1{
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    font-size: 30px;
+    border-radius: 10px 0 0 10px;
+    
+}
+.instructor-list{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); 
+    grid-gap: 20px; 
+    max-width: 1200px; 
+    margin: 0 auto; 
+    padding: 0 20px;
+    
+}
+.instructor-info{
+    border: 2px solid gray;
+    border-radius: 10px; 
+    margin-bottom: 20px; 
+    overflow: hidden; 
+    transition: transform 0.4s ease;
+    justify-content: center;
+    text-align: center;
+    padding: 10px;
+    background-color: rgba(228, 210, 195, 0.63);
+    height: 80%;
+}
+.add_instructor{
+    border: 2px solid gray;
+    border-radius: 10px; 
+    margin-bottom: 20px; 
+    overflow: hidden; 
+    transition: transform 0.4s ease;
+    justify-content: center;
+    text-align: center;
+    padding: 10px; 
+    background-color: rgba(228, 210, 195, 0.63);
+    height: 80%;
+}
+.add_instructor:hover {
+    transform: translateY(-5px); 
+}
+.add_instructor img{
+    width: 60px;
+    height: 60px;
+
+}
+.add_instructor .img{
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    height: 100%;
+    align-items: center;
+}

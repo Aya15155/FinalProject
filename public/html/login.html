@@ -1,0 +1,37 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login Page</title>
+<link rel="stylesheet" type="text/CSS" href="/css/login.css">
+</head>
+<body>
+    <div class="login-container" id="login-container">
+        
+        <img src="/media/download.jpeg" class="avatar" alt="Avatar">
+        
+        <div id="error" style="display: none;"  class="error"></div>
+        <form action="/html/login" id="loginForm" method="post">
+            <input type="text" id="username" name="username" placeholder="Username">
+            <input type="password" id="password" name="password" placeholder="Password">
+            <input type="submit" value="Login">
+        </form>
+    </div>
+     
+    <script>
+        const errorMessage = new URLSearchParams(window.location.search).get('error');
+        if (errorMessage) {
+           
+            document.getElementById('error').style.display ="block";
+            document.getElementById('error').innerText = errorMessage;
+        }else {
+           
+            document.getElementById('error').style.display = "none";
+        }
+    </script>
+</body>
+</html>
+

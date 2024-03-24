@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Details</title>
+    <style>
+        /* Some basic styling for demonstration purposes */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px auto;
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .add-student-row {
+            background-color: #e0dede;
+            cursor: pointer;
+        }
+    </style>
+    <link rel="stylesheet" href="/css/veiw.css">
+</head>
+<body>
+    <nav>
+        <a href="/html/administration.html" class="nav-link current-page">Courses</a>
+        <a href="/html/AllStudents.html" class="nav-link">Students</a>
+        <a href="/html/ALLinstructors.html" class="nav-link">Instructors</a>
+    </nav>
+    <div class="body">
+        <h1>Course Details</h1>
+        <div id="courseDetails"></div>
+    </div>
+
+    <script>
+               document.addEventListener('DOMContentLoaded', () => {
+            fetch('/allStudents')
+                .then(response => response.json())
+                .then(data => {
+                    const studentSelector = document.getElementById('studentId');
+                    
+                        if (data.length === 0) {
+                        const option = document.createElement('option');
+                        option.textContent = 'No students available';
+                        studentSelector.appendChild(option);
+                    } else {
+                        data.forEach(student => {
+                            const option = document.createElement('option');
+                            option.value = student.id;
+                            option.textContent = `${student.id} - ${student.name}`;
+                            studentSelector.appendChild(option);
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching students:', error);
+                });
+        });
+
+        
+        function getQueryVariable(variable) {
+            const query = window.location.search.substring(1);
+            const vars = query.split('&');
+            for (let i = 0; i < vars.length; i++) {
+                const pair = vars[i].split('=');
+                if (decodeURIComponent(pair[0]) === variable) {
+                    return decodeURIComponent(pair[1]);
+                }
+            }
+            console.error('Query variable %s not found', variable);
+            return null;
+        }
+
+        
+        function addNewStudent() {
+    const courseId = getQueryVariable('courseId');
+    const studentId = document.getElementById('studentId').value; 
+    const instructorId = document.getElementById('instructorId').value; 
+
+    if (!studentId) {
+        console.error('No student selected.');
+        return;
+    }
+
+    fetch(`/addStudentToCourse/${courseId}/${studentId}/${instructorId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ studentId, courseId })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Student added to course successfully');
+        window.location.reload();
+        
+    })
+    .catch(error => {
+        console.error('Error adding student to course:', error);
+        
+    });
+}
+
+
+        
+        const courseId = getQueryVariable('courseId');
+        fetch(`/course_details/${courseId}`)
+            .then(response => response.json())
+            .then(data => {
+                
+                const instructorsTable = document.createElement('table');
+                instructorsTable.innerHTML = `
+                    <caption><h3>Instructors</h3></caption>
+                    <tr><th>ID</th><th>Name</th><th>Email</th><th>Phone Number</th></tr>
+                    ${data.instructors.map(instructor => `<tr><td>${instructor.ID}</td><td>${instructor.name}</td><td>${instructor.email}</td><td>${instructor.phonnumber}</td></tr>`).join('')}
+                `;
+                
+                
+                const studentsTable = document.createElement('table');
+                studentsTable.innerHTML = `
+                    <caption><h3>Students</h3></caption>
+                    
+                    <tr><th>ID</th><th>Name</th><th>Email</th><th>Phone Number</th></tr>
+
+                    ${data.students.map(student => `<tr><td>${student.id}</td><td>${student.name}</td><td>${student.email}</td><td>${student.phonnumber}</td></tr>`).join('')}
+                    <tr class="add-student-row">
+                        <td > Add New Student to the course</td>
+                        <td>
+                            <select id="studentId" name="studentId"></select>
+                        </td>
+                        <td>
+                            <select id="instructorId" name="instructorId"></select>
+                        </td>
+                        <td>
+                            <input type="button" value="Add Student" onclick="addNewStudent()">
+                        </td>
+                    </tr>
+                `;
+
+                const assignmentsTable = document.createElement('table');
+                assignmentsTable.innerHTML = `
+                    <caption><h3>Assignments</h3></caption>
+                    <tr><th>Title</th><th>Deadline Date</th><th>Deadline Time</th></tr>
+                    ${data.assignments.map(assignment => {
+                        const deadlineDate = new Date(assignment.deadline);
+                        const day = deadlineDate.toLocaleDateString('en-US', { weekday: 'long' });
+                        const [month, date, year] = deadlineDate.toLocaleDateString('en-US').split('/');
+                        const time = deadlineDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+                        return `<tr><td>${assignment.title}</td><td>${date}/${month}/${year}</td><td>${time}</td></tr>`;
+                    }).join('')}
+                `;
+
+                
+                const courseDetailsDiv = document.getElementById('courseDetails');
+                courseDetailsDiv.appendChild(instructorsTable);
+                courseDetailsDiv.appendChild(studentsTable);
+                courseDetailsDiv.appendChild(assignmentsTable);
+
+                
+                populateInstructorDropdown(instructorsTable);
+            })
+            .catch(error => {
+                console.error('Error fetching course details:', error);
+                const courseDetailsDiv = document.getElementById('courseDetails');
+                courseDetailsDiv.textContent = 'An error occurred while fetching course details.';
+            });
+
+        
+        function populateInstructorDropdown(instructorsTable) {
+            const instructorSelector = document.getElementById('instructorId');
+            const instructorOptions = instructorsTable.querySelectorAll('tr:not(:first-child) td:first-child');
+
+            if (instructorOptions.length === 0) {
+                const option = document.createElement('option');
+                option.textContent = 'No instructors available';
+                instructorSelector.appendChild(option);
+            } else {
+                instructorOptions.forEach(option => {
+                    const instructorId = option.textContent;
+                    const instructorName = option.nextElementSibling.textContent;
+                    const optionElement = document.createElement('option');
+                    optionElement.value = instructorId;
+                    optionElement.textContent = `${instructorId} - ${instructorName}`;
+                    instructorSelector.appendChild(optionElement);
+                });
+            }
+        }
+
+ 
+    </script>
+</body>
+</html>

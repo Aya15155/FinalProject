@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upcoming Assignments</title>
+    <link rel="stylesheet" type="text/css" href="/css/gradebook.css">
+
+    <style>
+        tr.hoverable {
+            transition: transform 0.3s;
+        }
+
+        tr.hoverable:hover {
+            transform: translateY(-5px); 
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="/html/professor.html" class="nav-link">Courses</a>
+        <a href="" class="current-page">Grade Book</a>
+        <a href="/html/professorprofile.html" class="nav-link">Profile</a>
+    </nav>
+    <div class="h"><h2>Gradebook:</h2></div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Course Title</th>
+                <th>Course ID</th>
+                <th>Assignment</th>
+                <th>Grade</th>
+            </tr>
+        </thead>
+        <tbody id="assignmentList"></tbody>
+    </table>
+
+    <script>
+        window.onload = function() {
+            fetch('/instructor/upcoming_assignments')
+            .then(response => response.json())
+            .then(assignments => {
+                const assignmentList = document.getElementById('assignmentList');
+                if (assignments.length > 0) {
+                    assignments.forEach(assignment => {
+                        const row = document.createElement('tr');
+                        row.className = 'hoverable'; 
+                        row.innerHTML = `
+                            <td>${assignment.course_title}</td>
+                            <td>${assignment.cours_id}</td>
+                            <td>${assignment.title}</td>
+                            <td>${assignment.total_grade}</td>
+                        `;
+                        
+                        row.addEventListener('click', function() {
+                            window.location.href = `/html/assignment_details.html?assignmentId=${assignment.assiment_id}&courseId=${assignment.cours_id}`;
+                        });
+                        assignmentList.appendChild(row);
+                    });
+                } else {
+                    assignmentList.innerHTML = '<tr><td colspan="4">No upcoming assignments.</td></tr>';
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching upcoming assignments:', error);
+                const assignmentList = document.getElementById('assignmentList');
+                assignmentList.innerHTML = '<tr><td colspan="4">An error occurred while fetching upcoming assignments.</td></tr>';
+            });
+
+            // Fetch GPA
+        };
+    </script>
+
+</body>
+</html>

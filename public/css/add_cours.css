@@ -1,0 +1,138 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+}
+
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+
+form {
+    max-width: 600px;
+    margin: 0 auto;
+}
+a{
+    text-decoration: none;
+    color: black;
+}
+nav {
+    position: fixed;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #333;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    justify-content: center;
+    align-content: space-between;
+    
+    width: 10vw;
+}
+
+
+
+nav a{
+    color: #fff;
+    text-decoration: none;
+    padding: 30px 0 ;
+    
+    text-decoration: none;
+    width: 100%;
+    
+    align-items: center;
+    align-content: center;
+    text-align: center;
+}
+.current-page{
+    background-color: gray;
+    border-width: 3px;
+    border: white;
+    margin-left: 2vw;
+    border-radius: 10px 0 10px 0 ;
+    box-shadow: -3px -10px 10px rgba(66, 63, 63, 0.349);
+    z-index: 2;
+}
+nav a:hover {
+    background-color:#999595;
+    border-width: 3px;
+    border: white;
+    margin-left: 1vw;
+    border-radius: 10px 0 10px 0 ;
+    box-shadow: -3px -10px 10px rgba(66, 63, 63, 0.349);
+    z-index: 0;
+}
+
+.avatarOptions{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); 
+    grid-gap: 20px;
+    max-width: 1200px; 
+}
+
+.cours {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.cours input[type="radio"] {
+    display: none; 
+}
+
+.cours label {
+    display: block;
+    cursor: pointer;
+}
+
+.cours label img {
+    width: 300px;
+    height: 180px;
+    border: 2px solid transparent;
+    transition: border-color 0.3s ease; 
+}
+
+
+.cours input[type="radio"]:checked + label img {
+    border-color: red; 
+}
+
+label {
+    font-weight: bold;
+}
+
+
+input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+
+input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    background-color: gray;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+input[type="submit"]:hover {
+    background-color: rgba(228, 210, 195, 0.63);
+}
+
+
+
+
+

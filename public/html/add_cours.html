@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Course</title>
+    <link rel="stylesheet" href="/css/add_cours.css">
+</head>
+<body>
+    <nav>
+        <a href="/html/administration.html" class="nav-link current-page">Courses</a>
+        <a href="/html/AllStudents.html" class="nav-link">students</a>
+        <a href="/html/ALLinstructors.html" class="nav-link">Instructors</a>
+    </nav>
+
+    <h1>Add Course</h1>
+    <form id="addCourseForm" method="POST" action="/addCourse">
+        <label for="cours_id">Course ID:</label><br>
+        <input type="text" id="cours_id" name="cours_id" required><br><br>
+        
+        <label for="title">Title:</label><br>
+        <input type="text" id="title" name="title" required><br><br>
+
+        <label for="field">Field:</label><br>
+        <input type="text" id="field" name="field" required><br><br>
+
+        <label for="pre_required">Pre-required:</label><br>
+        <select id="courseSelector">
+            <option value="NULL">NULL</option>
+            
+        </select></br></br>
+        
+        <label for="avatar">Select Avatar:</label><br>
+        <div class="avatarOptions" id="avatarOptions">
+            <div class="cours">
+                <input type="radio" id="avatar1" name="avatar" value="1" required>
+                <label for="avatar1"><img src="/media/CSS_124.jpeg" width="200px"></label>
+            </div>
+            <div class="cours">
+                <input type="radio" id="avatar3" name="avatar" value="3" required>
+                <label for="avatar3"><img src="/media/CSS_123.jpeg" width="200px"></label>
+            </div>
+            <div class="cours">
+                <input type="radio" id="avatar4" name="avatar" value="4" required>
+                <label for="avatar4"><img src="/media/CSS_125.jpeg" width="200px"></label>
+            </div>
+            <div class="cours">
+                <input type="radio" id="avatar5" name="avatar" value="5" required>
+                <label for="avatar5"><img src="/media/CSS_126.jpeg" width="200px"></label>
+            </div>
+            <div class="cours">
+                <input type="radio" id="avatar6" name="avatar" value="6" required>
+                <label for="avatar6"><img src="/media/CSS_127.jpeg" width="200px"></label>
+            </div>
+        </div>
+        
+        
+       
+        <input type="submit" value="Add Course">
+    </form>
+
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('/displayall') 
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data); 
+                    const courseSelector = document.getElementById('courseSelector');
+                    if (data.length === 0) {
+                        const option = document.createElement('option');
+                        option.textContent = 'No courses available';
+                        courseSelector.appendChild(option);
+                    } else {
+                        data.forEach(course => {
+                            const option = document.createElement('option');
+                            option.value = course.id;
+                            option.textContent = course.title;
+                            courseSelector.appendChild(option);
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching courses:', error);
+                });
+        });
+    </script>
+</body>
+</html>

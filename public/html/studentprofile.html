@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Profile</title>
+    <link rel="stylesheet" href="/css/studentprofile.css">
+</head>
+</head>
+<body>
+    <nav>
+        <a href="/html/student.html" >Dashboard</a>
+        <a href="/html/cours.html" >Courses</a>
+        <a href="/html/gradebook.html">Grade Book</a>
+        <a href="#" class="current-page">Profile</a>
+    </nav>
+    <div class="body">
+<h1>Student Profile</h1>
+
+
+<div class="profile-info">
+    <div class="one">
+    <label for="studentId">Student ID: </label>
+    <span id="studentId"></span></div>
+    <div class="one">
+    <label for="studentName">Name: </label>
+    <span id="studentName"></span></div>
+    <div class="one">
+    <label for="studentEmail">Email: </label>
+    <span id="studentEmail"></span></div>
+</div>
+
+
+<strong><p>change password:</p></strong>
+<form action="/change-password" id="changePasswordForm" method="post" > <!-- Added method="post" -->
+    <input type="password" id="currentPassword"name="currentPassword"   placeholder="Current Password">
+    <input type="password" id="newPassword" name="newPassword" placeholder="New Password">
+    <input type="password" id="confirmPassword" name="confirmPassword"placeholder="Confirm New Password">
+    <input type="submit" id="submit" value="Change Password">
+    
+    <p id="passwordChangeMessage"></p>
+</form>
+
+</div>
+    <script>
+       
+            
+     
+    // Send request to change password
+    
+    </script>
+<script>
+window.onload = function() {
+    // Fetch student info
+    fetch('/student_info')
+    .then(response => response.json())
+    .then(student => {
+        document.getElementById('studentId').textContent = student.id;
+        document.getElementById('studentName').textContent = student.name;
+        document.getElementById('studentEmail').textContent = student.email;
+    })
+    .catch(error => console.error('Error fetching student info:', error));
+};
+
+
+    
+</script>
+
+</body>
+</html>

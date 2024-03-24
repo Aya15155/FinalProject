@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Student</title>
+    <link rel="stylesheet" href="/css/add_student.css">
+</head>
+<body>
+    <nav>
+        <a href="/html/administration.html" class="nav-link">Courses</a>
+        <a href="/html/AllStudents.html" class="nav-link current-page">Students</a>
+        <a href="/html/ALLinstructors.html" class="nav-link">Instructors</a>
+    </nav>
+    <div class="container">
+        <h1>Add Student</h1>
+        <form id="addStudentForm" method="POST" action="/addStudent">
+
+            <label for="studentId">Student ID:</label><br>
+            <select id="studentId" name="studentId">
+                
+            </select><br><br>
+
+            <input type="submit" value="Add Student">
+        </form>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('/allStudents') 
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data); 
+                    const studentSelector = document.getElementById('studentId');
+                    if (data.length === 0) {
+                        const option = document.createElement('option');
+                        option.textContent = 'No students available';
+                        studentSelector.appendChild(option);
+                    } else {
+                        data.forEach(student => {
+                            const option = document.createElement('option');
+                            option.value = student.id; 
+                            option.textContent = `${student.id} - ${student.name}`;
+                            studentSelector.appendChild(option);
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching students:', error);
+                });
+        });
+    </script>
+</body>
+</html>

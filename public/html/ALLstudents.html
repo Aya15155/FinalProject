@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Students</title>
+    <link rel="stylesheet" type="text/css" href="/css/ALLstudents.css">
+</head>
+<body>
+    <nav>
+        <a href="/html/administration.html" class="nav-link ">Courses</a>
+        <a href="#" class="current-page">students</a>
+        <a href="/html/ALLinstructors.html" class="nav-link">Instructors</a>
+    </nav>
+    <div class="students">
+        <h1>All Students</h1>
+        <div class="student-list">
+            <div class="add_student"><div class="img"><a href="/html/add_student.html"><img src="/media/image.png"></a></div></div>
+        </div>
+    </div>
+    <script>
+        fetch('/allStudents') 
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                const studentListContainer = document.querySelector('.student-list');
+                if (data.length === 0) {
+                    studentListContainer.innerHTML = "<p>No students found.</p>";
+                } else {
+                    data.forEach(student => {
+                        const studentDiv = document.createElement('div');
+                        studentDiv.classList.add('student');
+                        studentDiv.innerHTML = `
+                            <div class="student-info">
+                                <h2>${student.name}</h2>
+                                <p>ID: ${student.id}</p>
+                                <p>Email: ${student.email}</p>
+                                <p>Password: ${student.password}</p>
+                            </div>
+                        `;
+                        studentListContainer.appendChild(studentDiv);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching students:', error);
+            });
+    </script>
+</body>
+</html>

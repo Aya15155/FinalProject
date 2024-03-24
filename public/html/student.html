@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Educational Progress Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="/css/student.css">
+</head>
+<body>
+    <nav>
+        <a href="#" class="current-page">Dashboard</a>
+        <a href="/html/cours.html">Courses</a>
+        <a href="/html/gradebook.html">Grade Book</a>
+        <a href="/html/studentprofile.html">Profile</a>
+    </nav>
+
+    <div class="dashboard-container">
+        <div class="dashboard">
+            <h1>Educational Progress Overview</h1>
+            <div class="h"><h2>Assignmints:</h2>
+            </div>
+            <div class="assignment">
+                <!-- Placeholder for assignments -->
+                No Assignments yet
+            </div>
+        </div>
+    </div>
+
+    <script>
+        fetch('/upcoming_assignments') 
+            .then(response => response.json())
+            .then(data => {
+                const coursesContainer = document.querySelector('.assignment');
+
+                // Check if there are assignments available
+                if (data.length > 0) {
+                    // Clear the content of the courses container
+                    coursesContainer.innerHTML = '';
+
+                    // Loop through the assignments and display them
+                    data.forEach(assignment => {
+                        const deadlineDate = new Date(assignment.deadline);
+                        const day = deadlineDate.toLocaleDateString('en-US', { weekday: 'long' });
+                        const [month, date, year] = deadlineDate.toLocaleDateString('en-US').split('/');
+                        const time = deadlineDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+
+                        const courseDiv = document.createElement('div');
+                        courseDiv.classList.add('course');
+                        if(assignment.grade==="Not graded"){
+                        courseDiv.innerHTML = `
+                        <div class="content">
+                             <a href="/html/viwe.html?courseId=${assignment.cours_id}">
+                                <h2>${assignment.course_title}</h2>
+                            <p><strong>Assignment:</strong> ${assignment.title}</p>
+                            <p><strong>Deadline:</strong> ${date}/${month}/${year}, ${day}, ${time}</p>
+                            
+                            </div></a>
+                            <p class="red">Submit: Not Done Yet</p>
+                            <div class="grade">${assignment.grade}
+                                </div>
+                        `;
+                             }else{
+                                courseDiv.innerHTML = `
+                        <div class="content">
+                             <a href="/html/viwe.html?courseId=${assignment.cours_id}">
+                                <h2>${assignment.course_title}</h2>
+                            <p><strong>Assignment:</strong> ${assignment.title}</p>
+                            <p><strong>Deadline:</strong> ${date}/${month}/${year}, ${day}, ${time}</p></div></a>
+                            <p class="green">Submit: Done </p>
+                            <div class="grade">${assignment.grade}/${assignment.total_grade}
+                                
+                        `;
+                             
+                             }
+                        console.log(assignment.cours_id);
+                        coursesContainer.appendChild(courseDiv);
+                        
+                    });
+                } else {
+                    // No assignments available, update the message
+                    coursesContainer.textContent = 'No Assignments yet';
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching upcoming assignments:', error);
+            });
+    </script>
+    
+</body>
+</html>

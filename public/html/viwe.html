@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Materials</title>
+    <link rel="stylesheet" href="/css/veiw.css">
+</head>
+<body>
+    <nav>
+        <a href="/html/student.html" >Dashboard</a>
+        <a href="/html/cours.html" class="current-page">Courses</a>
+        <a href="/html/gradebook.html">Grade Book</a>
+        <a href="/html/studentprofile.html">Profile</a>
+    </nav>
+    <div class="body">
+        <h1>Course Materials</h1>
+    
+        <div id="materials-list">
+            <!-- Course materials will be displayed here -->
+        </div>
+    </div>
+
+    <script>
+        // Fetch course materials from the server
+        fetch(`/courses/${getQueryVariable('courseId')}/upcoming_assignments`)
+            .then(response => response.json())
+            .then(materials => {
+                const materialsList = document.getElementById('materials-list');
+
+                // Loop through the materials and create HTML elements to display them
+                materials.forEach(material => {
+                    const deadlineDate = new Date(material.deadline);
+                        const day = deadlineDate.toLocaleDateString('en-US', { weekday: 'long' });
+                        const [month, date, year] = deadlineDate.toLocaleDateString('en-US').split('/');
+                        const time = deadlineDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+                    const materialItem = document.createElement('div');
+
+                    materialItem.classList.add('material-item');
+                    if(material.student_grade=="Not graded"){
+                    materialItem.innerHTML = `
+                    <div>
+                            <h2><strong>Assignment:</strong> ${material.title}</h2>
+                            <p><strong>Deadline:</strong> ${date}/${month}/${year}, ${day}, ${time}</p>
+                            </div><p class="red">Submit: Not Done Yet </p>
+                            <div class="grade">${material.student_grade}</div>
+
+                    `;
+                    }else{
+                        materialItem.innerHTML = `
+                    <div>
+                            <h2><strong>Assignment:</strong> ${material.title}</h2>
+                            <p><strong>Deadline:</strong> ${date}/${month}/${year}, ${day}, ${time}</p>
+                            </div><p class="green">Submit: Done </p>
+                            <div class="grade">${material.student_grade}/${material.total_grade}</div>
+
+                    `;
+                    }
+                    materialsList.appendChild(materialItem);
+                });
+                
+            })
+            .catch(error => {
+                console.error('Error fetching upcoming assignments:', error);
+            });
+
+        // Function to get query variable from URL
+        function getQueryVariable(variable) {
+            const query = window.location.search.substring(1);
+            const vars = query.split('&');
+            for (let i = 0; i < vars.length; i++) {
+                const pair = vars[i].split('=');
+                if (decodeURIComponent(pair[0]) == variable) {
+                    return decodeURIComponent(pair[1]);
+                }
+            }
+            console.error('Query variable is not found', variable);
+            return null;
+        }
+    </script>
+</body>
+</html>

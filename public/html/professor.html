@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Courses</title>
+    <link rel="stylesheet" type="text/css" href="/css/cours.css">
+</head>
+<body>
+    <nav>
+        
+        <a href="#" class="nav-link current-page">Courses</a>
+        <a href="/html/gradebook _instr.html" class="nav-link">Grade Book</a>
+        <a href="/html/professorprofile.html" class="nav-link">Profile</a>
+    </nav>
+<div class="cours">
+    
+        <h1>My Courses</h1>
+      
+        <div class="courses">
+            
+        </div>
+    </div>
+</div>
+<script>
+fetch('/getcourses')
+    .then(response => response.json())
+    .then(data => {
+        console.log('Data received:', data);  // Check if data is received correctly
+        const coursesContainer = document.querySelector('.courses');
+        const includedCourses = []; // Array to store included courses
+
+        if (data.length === 0) {
+            coursesContainer.innerHTML = "<p>No courses enrolled yet.</p>";
+        } else {
+            data.forEach(course => {
+                // Check if the course title is not already included
+                const isAlreadyIncluded = includedCourses.some(includedCourse => includedCourse.title === course.title);
+                if (!isAlreadyIncluded) {
+                    includedCourses.push(course); // Add the course to the includedCourses array
+
+                    const courseDiv = document.createElement('div');
+                    courseDiv.classList.add('course');
+                    if (course.avatar === 1)
+                        var imgSrc = "/media/CSS_123.jpeg";
+                    else if (course.avatar === 3)
+                        var imgSrc = "/media/CSS_124.jpeg";
+                    else if (course.avatar === 4)
+                        var imgSrc = "/media/CSS_125.jpeg";
+                    else if (course.avatar === 5)
+                        var imgSrc = "/media/CSS_126.jpeg";
+                    else if (course.avatar === 6)
+                        var imgSrc = "/media/CSS_127.jpeg";
+                    courseDiv.innerHTML = `
+                        <a href="/html/incourse_instact.html?courseId=${course.cours_id}">
+                            <div class="C">
+                                <div class="image-box">
+                                    <img src="${imgSrc}">
+                                </div>
+                                <h2>${course.course_title}</h2>
+                            </div>
+                        </a>
+                    `;
+                    coursesContainer.appendChild(courseDiv);
+                }
+            });
+
+            console.log('Included courses:', includedCourses); // Output the included courses array
+        }
+    })
+    .catch(error => {
+        console.error('Error fetching courses:', error);
+    });
+
+
+</script>
+
+
+
+</body>
+</html>

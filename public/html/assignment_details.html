@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignment Details</title>
+    
+</head>
+<body>
+    <h1>Assignment Details</h1>
+    <div id="assignmentDetails"></div>
+
+    <script>
+        
+        window.onload = function() {
+          
+            
+            const urlParams = new URLSearchParams(window.location.search);
+            const assignmentId = urlParams.get('assignmentId');
+            console.log("class: "+assignmentId);
+            console.log("Assignment dital: "+ assignmentId);
+            
+            fetch(`/api/assignment_details/${assignmentId}`)
+
+            .then(response => response.json())
+            .then(data => {
+                const assignmentDetails = document.getElementById('assignmentDetails');
+                if (data.success) {
+                   
+                    assignmentDetails.innerHTML = `
+                        <h2>${data.assignment.title}</h2>
+                        <p>Course: ${data.assignment.course_title} (${data.assignment.cours_id})</p>
+                        <p>Total Grade: ${data.assignment.total_grade}</p>
+                    `;
+
+                    
+                    if (data.students.length > 0) {
+                        assignmentDetails.innerHTML += '<h3>Student Marks:</h3>';
+                        data.students.forEach(student => {
+                            assignmentDetails.innerHTML += `
+                                <p>${student.name}: ${student.grade}</p>
+                            `;
+                        });
+                    } else {
+                        assignmentDetails.innerHTML += '<p>No student marks found for this assignment.</p>';
+                    }
+                } else { 
+                    console.log("class: "+assignmentId);
+                    assignmentDetails.innerHTML = '<p>Error fetching assignment details.</p>';
+                }
+            })
+            .catch(error => {
+                console.log("class: "+assignmentId);
+                console.error('Error fetching assignment details:', error);
+                const assignmentDetails = document.getElementById('assignmentDetails');
+                assignmentDetails.innerHTML = '<p>An error occurred while fetching assignment details.</p>';
+            });
+        };
+    </script>
+</body>
+</html>
